@@ -1,0 +1,496 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #120c08;
+  overflow: hidden;
+}
+
+.hero {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.45s ease;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(15, 9, 5, 0.82) 0%,
+      rgba(15, 9, 5, 0.55) 22%,
+      rgba(15, 9, 5, 0.12) 48%,
+      rgba(15, 9, 5, 0.34) 100%
+    ),
+    rgba(0, 0, 0, 0.12);
+}
+
+.era-big {
+  position: absolute;
+  top: -3%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Playfair Display", serif;
+  font-size: clamp(5rem, 14vw, 13rem);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.20);
+  line-height: 1;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.hero-text {
+  position: absolute;
+  left: 7%;
+  top: 42%;
+  transform: translateY(-50%);
+  color: white;
+  max-width: 460px;
+  z-index: 4;
+}
+
+.hero-text h1 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2.2rem, 4.2vw, 4.8rem);
+  font-weight: 500;
+  line-height: 0.88;
+  letter-spacing: 0.01em;
+  margin-bottom: 1.4rem;
+}
+
+.hero-text p {
+  font-family: "Inter", sans-serif;
+  font-size: clamp(0.75rem, 1vw, 0.95rem);
+  font-weight: 300;
+  letter-spacing: 0.035em;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.86);
+  display: none;
+}
+
+p.tagline {
+  display: block;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(0.7rem, 1vw, 0.95rem);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.65);
+  margin-top: 0.9rem;
+  font-style: italic;
+}
+
+.era-toggle {
+  position: absolute;
+  right: 6%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
+  z-index: 6;
+}
+
+.era-toggle button {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.3rem, 2vw, 2rem);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.era-toggle button:hover,
+.era-toggle button.active {
+  color: white;
+  transform: translateX(-8px);
+}
+
+/* =========================
+   VINYL OVERLAY + STAGE
+   The stage is sized by JS to exactly match the
+   rendered (cover-cropped) image. Vinyl + tonearm
+   are positioned in % OF THE STAGE, which means
+   % of the image — identical on all screens.
+   ========================= */
+.vinyl-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  overflow: hidden;
+}
+
+.vinyl-overlay.visible {
+  opacity: 1;
+}
+
+.vinyl-stage {
+  position: absolute;
+  /* width/height/left/top set by layoutStage() in JS */
+  pointer-events: none;
+}
+
+@keyframes vinyl-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.vinyl-spin {
+  position: absolute;
+  /* left / top / width set from era config by JS — all in % of stage */
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  animation: vinyl-spin 2.5s linear infinite;
+  animation-play-state: paused;
+}
+
+.vinyl-spin.spinning {
+  animation-play-state: running;
+}
+
+.tonearm-img {
+  position: absolute;
+  /* left / top / width set from era config by JS — all in % of stage */
+  transform: translate(-50%, -4%);
+  transform-origin: 50% 4%;
+  pointer-events: auto;
+  cursor: grab;
+  min-width: 36px;
+}
+
+.tonearm-img.dragging {
+  cursor: grabbing;
+}
+
+/* =========================
+   MOBILE LAYOUT
+   (no vinyl/tonearm overrides needed anymore —
+    the stage system handles positioning everywhere)
+   ========================= */
+.mobile-label { display: none; }
+.era-slider   { display: none; }
+
+@media (max-width: 768px) {
+  body { overflow: hidden; }
+
+  .hero {
+    width: 100vw;
+    height: 100svh;
+  }
+
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  .overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(10, 6, 4, 0.72) 0%,
+        rgba(10, 6, 4, 0.38) 20%,
+        rgba(10, 6, 4, 0.05) 45%,
+        rgba(10, 6, 4, 0.20) 68%,
+        rgba(10, 6, 4, 0.78) 100%
+      );
+  }
+
+  .era-big { display: none; }
+
+  .hero-text {
+    left: 0;
+    top: 3%;
+    transform: none;
+    width: 100%;
+    max-width: none;
+    padding: 0 8%;
+    text-align: center;
+    z-index: 5;
+  }
+
+  .hero-text h1 {
+    font-size: clamp(1.8rem, 8vw, 3rem);
+    line-height: 0.9;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-text p {
+    display: block;
+    font-size: clamp(0.65rem, 2.5vw, 0.85rem);
+    line-height: 1.35;
+    letter-spacing: 0.035em;
+    max-width: 90%;
+    margin: 0 auto;
+  }
+
+  p.tagline { display: none; }
+
+  .era-toggle {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    top: auto;
+    bottom: 6.5%;
+    transform: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0;
+    padding: 0;
+    border: none;
+    z-index: 6;
+  }
+
+  .era-toggle button {
+    position: relative;
+    font-size: clamp(1rem, 4.2vw, 1.45rem);
+    color: rgba(255, 255, 255, 0.55);
+    transform: none;
+    white-space: nowrap;
+    padding: 0;
+  }
+
+  .era-toggle button:hover,
+  .era-toggle button.active {
+    color: #fff;
+    transform: none;
+  }
+
+  .era-toggle button::before     { display: none; }
+  .era-toggle button.active::after { display: none; }
+  .era-slider    { display: none; }
+  .desktop-label { display: none; }
+  .mobile-label  { display: inline; }
+}
+
+/* ═══════ TRACK PICKER ═══════ */
+.track-list {
+  position: absolute;
+  right: 6%;
+  bottom: 8%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 6;
+}
+
+.track-list button {
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.65);
+  font-family: "Inter", sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.track-list button:hover,
+.track-list button.active {
+  color: #fff;
+  border-color: #fff;
+  background: rgba(255,255,255,0.12);
+}
+
+@media (max-width: 768px) {
+  .track-list {
+    left: 8%;
+    right: 8%;
+    bottom: 13%;
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+  .track-list button {
+    font-size: 0.65rem;
+    padding: 5px 10px;
+    white-space: nowrap;
+  }
+}
+
+/* ═══════ STATS BUTTON ═══════ */
+.stats-btn {
+  position: absolute;
+  bottom: 2.5%;
+  left: 7%;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.55);
+  font-family: "Inter", sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  padding: 5px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  z-index: 6;
+}
+ 
+.stats-btn:hover {
+  color: #fff;
+  border-color: rgba(255,255,255,0.7);
+}
+ 
+/* ═══════ STATS OVERLAY + PANEL ═══════ */
+.stats-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+ 
+.stats-overlay.open {
+  display: flex;
+}
+ 
+.stats-panel {
+  background: rgba(12, 8, 5, 0.95);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  width: min(420px, 90vw);
+  padding: 1.6rem;
+  backdrop-filter: blur(12px);
+}
+ 
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.4rem;
+  font-family: "Playfair Display", serif;
+  font-size: 1.1rem;
+  color: white;
+}
+ 
+.stats-close {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.45);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+ 
+.stats-close:hover { color: white; }
+ 
+.stats-section {
+  margin-bottom: 1.2rem;
+}
+ 
+.stats-label {
+  font-family: "Inter", sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.3rem;
+}
+ 
+.stats-value {
+  font-family: "Playfair Display", serif;
+  font-size: 1rem;
+  color: white;
+}
+ 
+.stats-time {
+  font-family: "Inter", sans-serif;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.5);
+  margin-left: 0.5rem;
+}
+ 
+.stats-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+ 
+.stats-bar-label {
+  font-family: "Inter", sans-serif;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.6);
+  width: 90px;
+  flex-shrink: 0;
+}
+ 
+.stats-bar-track {
+  flex: 1;
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+ 
+.stats-bar-fill {
+  height: 100%;
+  background: rgba(255,255,255,0.55);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+ 
+.stats-bar-time {
+  font-family: "Inter", sans-serif;
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.4);
+  width: 40px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.stats-reset {
+  margin-top: 1.2rem;
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.5);
+  font-family: "Inter", sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.stats-reset:hover {
+  color: #fff;
+  border-color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.06);
+}
+ 
+@media (max-width: 768px) {
+  .stats-btn {
+    bottom: auto;
+    top: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 1.5%;
+  }
+}

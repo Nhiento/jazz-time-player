@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Jazz Time Player</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <section class="hero">
+    <img id="heroImage" src="images/1940s_new2.png" alt="Jazz era background" class="hero-img" />
+
+    <div class="overlay"></div>
+
+    <!-- stage div added: JS sizes it to match the rendered image -->
+    <div class="vinyl-overlay" id="vinylOverlay">
+      <div class="vinyl-stage" id="vinylStage">
+        <img class="vinyl-spin" src="images/vinyl_1940s_new.png" alt="" />
+        <img class="tonearm-img" src="images/tonearm_1940s_new.png" alt="" />
+      </div>
+    </div>
+
+    <h2 id="bigEraText" class="era-big">1940s</h2>
+
+    <div class="hero-text">
+      <h1>The Jazz<br>Time Player</h1>
+      <p class="tagline">Drop the needle. Travel through time.</p>
+      <p id="eraDescription">
+        Bebop, swing, smoky clubs, and the sound of jazz becoming a modern art form.
+      </p>
+    </div>
+
+    <div class="era-toggle">
+      <div class="era-slider"></div>
+      <button class="active" data-era="1940s">1940s</button>
+      <button data-era="1950s">1950s</button>
+      <button data-era="1960s">1960s</button>
+      <button data-era="1970s">1970s</button>
+      <button data-era="1980s-1990s">
+        <span class="desktop-label">1980s–1990s</span>
+        <span class="mobile-label">80s–90s</span>
+      </button>
+      <button data-era="2000s-2020s">
+        <span class="desktop-label">2000s–2020s</span>
+        <span class="mobile-label">00s–20s</span>
+      </button>
+    </div>
+    <div class="track-list" id="trackList"></div>
+
+    <!-- Stats button -->
+    <button class="stats-btn" id="statsBtn" onclick="openStats()">Your Session</button>
+ 
+    <!-- Stats panel -->
+    <div class="stats-overlay" id="statsOverlay" onclick="closeStats(event)">
+      <div class="stats-panel">
+        <div class="stats-header">
+          <span>Your Jazz Session</span>
+          <button class="stats-close" onclick="closeStats()">✕</button>
+        </div>
+        <div id="statsContent"></div>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
