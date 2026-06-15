@@ -228,6 +228,16 @@ document.addEventListener("touchstart", () => {
 ═══════════════════════════════════════════════════ */
 const sessionId = crypto.randomUUID();
 
+/* ═══════ SUPABASE (cloud analytics) ═══════ */
+const SUPABASE_URL = "https://vvluxmlvobxnikgwojjx.supabase.co";
+const SUPABASE_KEY = "sb_publishable_M2f4PmroMm4l7rqqWZF6KA_PT0yGLlg";
+let db = null;
+try {
+  if (window.supabase) db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+} catch (e) {
+  console.warn("Supabase init skipped:", e);
+}
+
 const defaultStats = {
   eraTime:    { "1940s": 0, "1950s": 0, "1960s": 0, "1970s": 0, "1980s-1990s": 0, "2000s-2020s": 0 },
   trackPlays: {}
@@ -258,6 +268,11 @@ function flushListening() {
   if (seconds > 0) {
     sessionStats.eraTime[currentEra] = (sessionStats.eraTime[currentEra] || 0) + seconds;
     saveStats();
+    if (db) {
+      db.from("era_visits")
+        .insert({ era: currentEra, seconds, session_id: sessionId })
+        .then(({ error }) => { if (error) console.warn("era_visits insert:", error.message); });
+    }
   }
   listenStart = null;
 }
@@ -276,6 +291,11 @@ function logTrackPlay(eraKey, trackTitle) {
   const key = `${trackTitle} (${eraKey})`;
   sessionStats.trackPlays[key] = (sessionStats.trackPlays[key] || 0) + 1;
   saveStats();
+  if (db) {
+    db.from("track_plays")
+      .insert({ era: eraKey, track_title: trackTitle, session_id: sessionId })
+      .then(({ error }) => { if (error) console.warn("track_plays insert:", error.message); });
+  }
 }
 
 function formatTime(s) {
