@@ -17,27 +17,21 @@ Behind the experience is a lightweight analytics layer that tracks how visitors 
 Each era is built around a feeling — a genre and a mood rather than a list of famous songs. The three tracks per era are chosen to capture the range of that decade's sound.
 
 - **1940s — Bebop & Big Band**
-
 Smoky clubs and the birth of modern jazz. Fast, virtuosic, and alive — the sound of jazz becoming an art form. Warm, slightly muffled, like hearing it through an old radio.
 
 - **1950s — Cool Jazz & Hard Bop**
-
 Mid-century sophistication. Smoother and more relaxed than bebop — confident, clean, and effortlessly stylish.
 
 - **1960s — Modal & Late-Night Jazz**
-
 Sparse, introspective, and emotional. Space between the notes, breathy saxophone, intimate piano — the sound of 2am and being okay with it.
 
 - **1970s — Fusion & Soul Jazz**
-
 Electric instruments, funk rhythms, and analog warmth. Ranges from driving electric fusion to mellow late-night Rhodes — groovy, expressive, and a little wild.
 
 - **1980s–1990s — Acid Jazz & Late-Night R&B**
-
 Neon lights and dim-lit clubs. Noir saxophone, funky Hammond organ and wah guitar, and slow, sensual after-hours grooves. A whole night out in three tracks.
 
 - **2000s–2020s — Nu Jazz & Contemporary**
-
 Jazz with no rules. Hip-hop-influenced grooves, lo-fi chill, and ambitious experimental sounds — the genre stretching in every direction at once.
 
 ## Features
